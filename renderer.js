@@ -5,7 +5,6 @@ let data = { workspaces: [], activeWorkspace: 'default' };
 const workspaceTabs = document.getElementById('workspace-tabs');
 const folderList = document.getElementById('folder-list');
 const addWorkspaceBtn = document.getElementById('add-workspace');
-const addFolderBtn = document.getElementById('btn-add-folder');
 const modalOverlay = document.getElementById('modal-overlay');
 const modalTitle = document.getElementById('modal-title');
 const modalInput = document.getElementById('modal-input');
@@ -114,8 +113,16 @@ function renderWorkspaceTabs() {
 
 function renderFolderList() {
   const ws = activeWs();
+  const addBtnHtml = `
+    <button class="btn-add-folder" id="btn-add-folder" title="폴더 추가">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12h14" stroke-linecap="round"/>
+      </svg>
+    </button>`;
+
   if (!ws || ws.folders.length === 0) {
-    folderList.innerHTML = `<span class="empty-hint">폴더를 추가하세요</span>`;
+    folderList.innerHTML = `<span class="empty-hint">폴더를 추가하세요</span>${addBtnHtml}`;
+    bindAddFolderBtn();
     return;
   }
 
@@ -129,7 +136,8 @@ function renderFolderList() {
       </svg>
       <span class="folder-name">${escapeHtml(f.name)}</span>
     </div>
-  `).join('');
+  `).join('') + addBtnHtml;
+  bindAddFolderBtn();
 
   // Folder drag & drop reorder
   let dragSrcIdx = null;
@@ -182,6 +190,14 @@ function renderFolderList() {
       save();
       render();
     });
+  });
+}
+
+function bindAddFolderBtn() {
+  const addFolderBtn = document.getElementById('btn-add-folder');
+  addFolderBtn.addEventListener('click', async () => {
+    const paths = await window.api.selectFolder();
+    if (paths.length > 0) addFolders(paths);
   });
 }
 
@@ -347,12 +363,6 @@ addWorkspaceBtn.addEventListener('click', () => {
     save();
     render();
   });
-});
-
-// Add folder button
-addFolderBtn.addEventListener('click', async () => {
-  const paths = await window.api.selectFolder();
-  if (paths.length > 0) addFolders(paths);
 });
 
 // Search

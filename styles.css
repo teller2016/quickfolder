@@ -109,18 +109,22 @@ body {
 /* Workspace Bar */
 .workspace-bar {
   display: flex;
-  align-items: center;
-  padding: 4px 12px;
-  gap: 4px;
+  align-items: stretch;
+  padding: 0 12px;
+  gap: 2px;
   flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
 }
 
 .workspace-tabs {
   display: flex;
-  gap: 4px;
+  gap: 2px;
   flex: 1;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 24px), transparent);
+  mask-image: linear-gradient(to right, black calc(100% - 24px), transparent);
 }
 
 .workspace-tabs::-webkit-scrollbar {
@@ -128,13 +132,15 @@ body {
 }
 
 .workspace-tab {
-  padding: 6px 14px;
-  border-radius: 20px;
+  padding: 8px 14px;
+  border-radius: 0;
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
   background: transparent;
-  border: 1px solid transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.15s ease;
@@ -147,8 +153,12 @@ body {
 
 .workspace-tab.active {
   color: var(--accent);
-  background: rgba(47, 129, 247, 0.1);
-  border-color: rgba(47, 129, 247, 0.3);
+  background: transparent;
+  border-bottom-color: var(--accent);
+}
+
+.workspace-tab.active:hover {
+  background: rgba(47, 129, 247, 0.06);
 }
 
 .workspace-tab.dragging {
@@ -156,13 +166,11 @@ body {
 }
 
 .workspace-tab.drag-over-left {
-  border-left: 2px solid var(--accent);
-  padding-left: 12px;
+  box-shadow: inset 2px 0 0 var(--accent);
 }
 
 .workspace-tab.drag-over-right {
-  border-right: 2px solid var(--accent);
-  padding-right: 12px;
+  box-shadow: inset -2px 0 0 var(--accent);
 }
 
 .workspace-tab .count {
@@ -177,16 +185,17 @@ body {
 }
 
 .btn-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--bg-secondary);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  align-self: center;
   transition: all 0.15s ease;
   flex-shrink: 0;
 }
@@ -194,7 +203,6 @@ body {
 .btn-icon:hover {
   background: var(--bg-tertiary);
   color: var(--text);
-  border-color: var(--accent);
 }
 
 /* Folder List */
@@ -204,7 +212,7 @@ body {
   flex-wrap: wrap;
   align-content: flex-start;
   gap: 4px;
-  padding: 4px 12px;
+  padding: 6px 12px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--bg-tertiary) transparent;
@@ -274,6 +282,26 @@ body {
   max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.btn-add-folder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px dashed var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.btn-add-folder:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(47, 129, 247, 0.06);
 }
 
 .empty-hint {
